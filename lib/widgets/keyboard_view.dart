@@ -1071,53 +1071,53 @@ class _KeyboardViewState extends State<KeyboardView> {
     } else {
       icon = Icons.keyboard_outlined;
       color = Colors.indigo;
-      editor = Row(
+      editor = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Key: ', style: TextStyle(color: Colors.white60, fontSize: 11)),
-          Container(
-            height: 24,
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: DropdownButton<String>(
-              value: _availableKeys.contains(step.key) ? step.key : 'ENTER',
-              dropdownColor: const Color(0xFF1E1E2E),
-              underline: Container(),
-              style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
-              icon: const Icon(Icons.arrow_drop_down, color: Colors.white30, size: 14),
-              onChanged: (val) {
-                if (val != null) {
-                  setState(() {
-                    step.key = val;
-                  });
-                }
-              },
-              items: _availableKeys.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          ),
-          const SizedBox(width: 6),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  _buildStepModifierChip(step, 'CTRL', step.ctrl, (val) => setState(() => step.ctrl = val)),
-                  const SizedBox(width: 3),
-                  _buildStepModifierChip(step, 'SHIFT', step.shift, (val) => setState(() => step.shift = val)),
-                  const SizedBox(width: 3),
-                  _buildStepModifierChip(step, 'ALT', step.alt, (val) => setState(() => step.alt = val)),
-                  const SizedBox(width: 3),
-                  _buildStepModifierChip(step, 'WIN', step.gui, (val) => setState(() => step.gui = val)),
-                ],
+          Row(
+            children: [
+              const Text('Key: ', style: TextStyle(color: Colors.white60, fontSize: 11)),
+              Container(
+                height: 22,
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: DropdownButton<String>(
+                  value: _availableKeys.contains(step.key) ? step.key : 'ENTER',
+                  dropdownColor: const Color(0xFF1E1E2E),
+                  underline: Container(),
+                  style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.white30, size: 14),
+                  onChanged: (val) {
+                    if (val != null) {
+                      setState(() {
+                        step.key = val;
+                      });
+                    }
+                  },
+                  items: _availableKeys.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ),
-            ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              _buildStepModifierChip(step, 'CTRL', step.ctrl, (val) => setState(() => step.ctrl = val)),
+              const SizedBox(width: 3),
+              _buildStepModifierChip(step, 'SHIFT', step.shift, (val) => setState(() => step.shift = val)),
+              const SizedBox(width: 3),
+              _buildStepModifierChip(step, 'ALT', step.alt, (val) => setState(() => step.alt = val)),
+              const SizedBox(width: 3),
+              _buildStepModifierChip(step, 'WIN', step.gui, (val) => setState(() => step.gui = val)),
+            ],
           ),
         ],
       );
