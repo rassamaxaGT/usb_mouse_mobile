@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import 'services/hid_service.dart';
 import 'widgets/touchpad.dart';
 import 'widgets/keyboard_view.dart';
@@ -126,6 +127,19 @@ class _MainControlScreenScreenState extends State<MainControlScreen>
     }
   }
 
+  // Управление засыпанием экрана устройства
+  Future<void> _updateWakelock(bool enable) async {
+    try {
+      if (enable) {
+        await WakelockPlus.enable();
+      } else {
+        await WakelockPlus.disable();
+      }
+    } catch (e) {
+      debugPrint('Wakelock error: $e');
+    }
+  }
+
   // Подключение / Отключение к /dev/hidg*
   Future<void> _toggleConnection() async {
     setState(() => isProcessing = true);
@@ -135,6 +149,7 @@ class _MainControlScreenScreenState extends State<MainControlScreen>
         isConnected = false;
         isProcessing = false;
       });
+      _updateWakelock(false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -152,6 +167,10 @@ class _MainControlScreenScreenState extends State<MainControlScreen>
         isConnected = ok;
         isProcessing = false;
       });
+
+      if (ok) {
+        _updateWakelock(true);
+      }
 
       if (mounted) {
         if (!ok) {
@@ -178,6 +197,7 @@ class _MainControlScreenScreenState extends State<MainControlScreen>
 
   @override
   void dispose() {
+    _updateWakelock(false);
     _tabController.dispose();
     super.dispose();
   }
