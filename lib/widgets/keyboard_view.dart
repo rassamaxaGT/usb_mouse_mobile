@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:file_picker/file_picker.dart';
 import '../services/hid_service.dart';
 
 class KeyboardView extends StatefulWidget {
@@ -653,6 +655,42 @@ class _KeyboardViewState extends State<KeyboardView> {
     );
   }
 
+  // Метод выбора и открытия файла из памяти телефона
+  Future<void> _openScriptFile() async {
+    try {
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['txt', 'ducky'],
+      );
+
+      if (result != null && result.files.single.path != null) {
+        final File file = File(result.files.single.path!);
+        final String content = await file.readAsString();
+        setState(() {
+          _macroController.text = content;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Loaded "${result.files.single.name}" successfully!'),
+              backgroundColor: const Color(0xFF10B981),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('Error picking file: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to load file: $e'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    }
+  }
+
   // Текстовый эмулятор Ducky Macro Studio
   Widget _buildDuckyMacroStudio() {
     return Column(
@@ -661,6 +699,15 @@ class _KeyboardViewState extends State<KeyboardView> {
         // Пресеты
         Row(
           children: [
+            ActionChip(
+              avatar: const Icon(Icons.folder_open, color: Color(0xFF6366F1), size: 14),
+              label: const Text('Open TXT', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+              backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.12),
+              side: BorderSide(color: const Color(0xFF6366F1).withValues(alpha: 0.3), width: 1),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              onPressed: _openScriptFile,
+            ),
+            const SizedBox(width: 10),
             const Icon(Icons.flash_on, color: Color(0xFF10B981), size: 16),
             const SizedBox(width: 6),
             const Text(
