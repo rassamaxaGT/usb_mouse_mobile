@@ -658,7 +658,7 @@ class _KeyboardViewState extends State<KeyboardView> {
   // Метод выбора и открытия файла из памяти телефона
   Future<void> _openScriptFile() async {
     try {
-      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['txt', 'ducky'],
       );

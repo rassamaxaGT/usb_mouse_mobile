@@ -35,8 +35,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.5.5
-  wakelock_plus: ^1.6.1
-  file_picker: ^3.0.4
+  wakelock_plus: 1.5.2
+  file_picker: ^11.0.2
 
 dev_dependencies:
   flutter_test:
