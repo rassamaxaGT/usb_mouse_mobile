@@ -1012,17 +1012,17 @@ class _KeyboardViewState extends State<KeyboardView> {
       color = Colors.amber;
       editor = Row(
         children: [
-          const Text('Delay: ', style: TextStyle(color: Colors.white60, fontSize: 12)),
+          const Text('Delay: ', style: TextStyle(color: Colors.white60, fontSize: 11)),
           Container(
-            width: 70,
-            height: 28,
+            width: 55,
+            height: 24,
             margin: const EdgeInsets.only(left: 4),
             child: TextField(
               keyboardType: TextInputType.number,
-              style: const TextStyle(color: Colors.white, fontSize: 12),
+              style: const TextStyle(color: Colors.white, fontSize: 11),
               textAlign: TextAlign.center,
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
                 isDense: true,
                 enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.15))),
                 focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
@@ -1035,7 +1035,7 @@ class _KeyboardViewState extends State<KeyboardView> {
             ),
           ),
           const SizedBox(width: 4),
-          const Text('ms', style: TextStyle(color: Colors.white60, fontSize: 12)),
+          const Text('ms', style: TextStyle(color: Colors.white60, fontSize: 11)),
         ],
       );
     } else if (step.type == 'text') {
@@ -1043,17 +1043,17 @@ class _KeyboardViewState extends State<KeyboardView> {
       color = Colors.green;
       editor = Row(
         children: [
-          const Text('Type: ', style: TextStyle(color: Colors.white60, fontSize: 12)),
+          const Text('Type: ', style: TextStyle(color: Colors.white60, fontSize: 11)),
           Expanded(
             child: Container(
-              height: 28,
+              height: 24,
               margin: const EdgeInsets.only(left: 4),
               child: TextField(
-                style: const TextStyle(color: Colors.white, fontSize: 12),
+                style: const TextStyle(color: Colors.white, fontSize: 11),
                 decoration: InputDecoration(
-                  hintText: 'Enter text here...',
-                  hintStyle: const TextStyle(color: Colors.white24, fontSize: 12),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                  hintText: 'Enter text...',
+                  hintStyle: const TextStyle(color: Colors.white24, fontSize: 11),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
                   isDense: true,
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.15))),
                   focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.green)),
@@ -1071,112 +1071,107 @@ class _KeyboardViewState extends State<KeyboardView> {
     } else {
       icon = Icons.keyboard_outlined;
       color = Colors.indigo;
-      editor = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      editor = Row(
         children: [
-          Row(
-              children: [
-                const Text('Key: ', style: TextStyle(color: Colors.white60, fontSize: 12)),
-                const SizedBox(width: 4),
-                Container(
-                  height: 26,
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: DropdownButton<String>(
-                    value: _availableKeys.contains(step.key) ? step.key : 'ENTER',
-                    dropdownColor: const Color(0xFF1E1E2E),
-                    underline: Container(),
-                    style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
-                    icon: const Icon(Icons.arrow_drop_down, color: Colors.white30, size: 16),
-                    onChanged: (val) {
-                      if (val != null) {
-                        setState(() {
-                          step.key = val;
-                        });
-                      }
-                    },
-                    items: _availableKeys.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
+          const Text('Key: ', style: TextStyle(color: Colors.white60, fontSize: 11)),
+          Container(
+            height: 24,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(4),
             ),
-            const SizedBox(height: 6),
-            // Модификаторы для комбинаций клавиш
-            Row(
-              children: [
-                _buildStepModifierChip(step, 'CTRL', step.ctrl, (val) => setState(() => step.ctrl = val)),
-                const SizedBox(width: 4),
-                _buildStepModifierChip(step, 'SHIFT', step.shift, (val) => setState(() => step.shift = val)),
-                const SizedBox(width: 4),
-                _buildStepModifierChip(step, 'ALT', step.alt, (val) => setState(() => step.alt = val)),
-                const SizedBox(width: 4),
-                _buildStepModifierChip(step, 'WIN', step.gui, (val) => setState(() => step.gui = val)),
-              ],
+            child: DropdownButton<String>(
+              value: _availableKeys.contains(step.key) ? step.key : 'ENTER',
+              dropdownColor: const Color(0xFF1E1E2E),
+              underline: Container(),
+              style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.white30, size: 14),
+              onChanged: (val) {
+                if (val != null) {
+                  setState(() {
+                    step.key = val;
+                  });
+                }
+              },
+              items: _availableKeys.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
-          ],
-        );
-      }
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _buildStepModifierChip(step, 'CTRL', step.ctrl, (val) => setState(() => step.ctrl = val)),
+                  const SizedBox(width: 3),
+                  _buildStepModifierChip(step, 'SHIFT', step.shift, (val) => setState(() => step.shift = val)),
+                  const SizedBox(width: 3),
+                  _buildStepModifierChip(step, 'ALT', step.alt, (val) => setState(() => step.alt = val)),
+                  const SizedBox(width: 3),
+                  _buildStepModifierChip(step, 'WIN', step.gui, (val) => setState(() => step.gui = val)),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+    }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 6),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      margin: const EdgeInsets.only(bottom: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Цветная марка слева
+          // Маленькая цветная марка
           Container(
-            padding: const EdgeInsets.all(6),
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: color, size: 16),
+            child: Icon(icon, color: color, size: 14),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
 
-          // Центральный редактор
+          // Редактор
           Expanded(child: editor),
 
-          // Перемещение шагов вверх/вниз и удаление
-          Column(
+          const SizedBox(width: 6),
+
+          // Перемещение и удаление
+          Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_upward, size: 14),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    color: Colors.white38,
-                    onPressed: index > 0 ? () => _moveStep(index, -1) : null,
-                  ),
-                  const SizedBox(width: 6),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_downward, size: 14),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    color: Colors.white38,
-                    onPressed: index < _builderSteps.length - 1 ? () => _moveStep(index, 1) : null,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
               IconButton(
-                icon: const Icon(Icons.delete_outline, size: 16, color: Colors.redAccent),
+                icon: const Icon(Icons.arrow_upward, size: 13),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                color: Colors.white38,
+                onPressed: index > 0 ? () => _moveStep(index, -1) : null,
+              ),
+              const SizedBox(width: 4),
+              IconButton(
+                icon: const Icon(Icons.arrow_downward, size: 13),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                color: Colors.white38,
+                onPressed: index < _builderSteps.length - 1 ? () => _moveStep(index, 1) : null,
+              ),
+              const SizedBox(width: 6),
+              IconButton(
+                icon: const Icon(Icons.delete_outline, size: 15, color: Colors.redAccent),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
                 onPressed: () {
